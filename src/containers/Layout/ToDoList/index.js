@@ -6,8 +6,19 @@ import List from './List/index';
 
 class ToDoList extends Component {
     state = {
-        value: '',
-        list: []
+        list: [],
+        value:''
+
+    }
+
+    submitEditValue = (value, index) => {
+        const {list} = this.state
+        list[index].needEdit = false
+        list[index].value = value
+        this.setState({
+            list: [...list]
+        })
+
     }
     deleteItem = (index) =>{
         const {list} = this.state
@@ -17,12 +28,37 @@ class ToDoList extends Component {
 
         })
     }
-    handleChange = (e) => this.setState({value: e.target.value});
+
+    changeStatusForEdit = (index) => {
+        const {list} = this.state
+        list[index].needEdit = true
+        this.setState({
+            list: [...list]
+        })
+    }
+
+    handleChange = (e) => this.setState({
+        value: e.target.value});
+
     addElementToList = () =>{
         const {list, value} = this.state;
-        this.setState(
-            {list: [...list, value]}
-        )
+        if (value)
+        {
+            this.setState(
+                {
+                    list: [...list,
+
+                        {
+                            value: value,
+                            needEdit: false
+                        }
+                    ],
+
+                }
+
+         )
+
+        }
     }
 
     render() {
@@ -35,13 +71,15 @@ class ToDoList extends Component {
                 />
                 <button
                     onClick={this.addElementToList}
-                    className={"Prikol"}
+
                 >
                    Add Element
                 </button>
                 <List
                 data = {list}
                 deleteItem={this.deleteItem}
+                editItem={this.changeStatusForEdit}
+                submitEdit={this.submitEditValue}
                 />
                 </div>
 
